@@ -31,6 +31,10 @@ rand_chacha = "0.2.2"
 name = "gcd"
 harness = false
 
+[[bench]]
+name = "sqrt"
+harness = false
+
 [[bin]]
 name = "factor"
 path = "src/main.rs"
