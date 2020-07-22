@@ -28,6 +28,7 @@ use self::sieve::Sieve;
 use miller_rabin::is_prime;
 
 #[path = "src/numeric.rs"]
+#[allow(dead_code)]
 mod numeric;
 use numeric::modular_inverse;
 

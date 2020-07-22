@@ -16,7 +16,6 @@ use std::mem::swap;
 
 // This is incorrectly reported as dead code,
 //  presumably when included in build.rs.
-#[allow(dead_code)]
 pub(crate) fn gcd(mut a: u64, mut b: u64) -> u64 {
     while b > 0 {
         a %= b;
