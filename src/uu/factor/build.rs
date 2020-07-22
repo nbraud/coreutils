@@ -40,6 +40,7 @@ fn main() {
     let out_str = env::var("OUT_DIR").unwrap();
     let out_dir = Path::new(&out_str);
     prime_table(&out_dir).unwrap();
+    square_table(&out_dir).unwrap();
 }
 
 fn prime_table(out_dir: &Path) -> std::io::Result<()> {
@@ -81,6 +82,20 @@ fn prime_table(out_dir: &Path) -> std::io::Result<()> {
         "\n];\n\n#[allow(dead_code)]\npub const NEXT_PRIME: u64 = {};\n",
         x
     )?;
+
+    Ok(())
+}
+
+fn square_table(out_dir: &Path) -> std::io::Result<()> {
+    let mut file = File::create(out_dir.join("square_table.rs")).unwrap();
+
+    for (j, l) in &[(11_usize, 6), (63, 32), (64, 32), (65, 33)] {
+        let mut q = vec![true; *j];
+        for k in 0..*l {
+            q[k * k % j] = false;
+        }
+        writeln!(file, "const Q{}: [bool; {}] = {:?};", j, j, q)?;
+    }
 
     Ok(())
 }
