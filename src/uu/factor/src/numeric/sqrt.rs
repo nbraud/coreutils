@@ -31,6 +31,15 @@ pub fn floor_sqrt(n: u64) -> u64 {
     }
 }
 
+pub fn exact_sqrt(n: u64) -> Option<u64> {
+    let r = floor_sqrt(n);
+    if r * r == n {
+        Some(r)
+    } else {
+        None
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -42,6 +51,18 @@ mod tests {
             let s = floor_sqrt(n);
             let t = s + 1;
             (s * s <= n) && (t * t > n)
+        }
+
+        fn exact_sqrt_matches(n: u64) -> bool {
+            if let Some(r) = exact_sqrt(n) {
+                r * r == n
+            } else {
+                true
+            }
+        }
+
+        fn exact_sqrt_square(n: u64) -> bool {
+            exact_sqrt(n * n) == Some(n)
         }
     }
 }

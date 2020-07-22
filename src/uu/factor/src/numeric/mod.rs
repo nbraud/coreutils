@@ -17,4 +17,4 @@ mod montgomery;
 pub(crate) use montgomery::{Arithmetic, Montgomery};
 
 mod sqrt;
-pub use sqrt::floor_sqrt;
+pub use sqrt::{exact_sqrt, floor_sqrt};
