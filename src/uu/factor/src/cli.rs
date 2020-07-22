@@ -18,6 +18,7 @@ pub(crate) use factor::*;
 mod miller_rabin;
 pub mod numeric;
 mod rho;
+pub mod squfof;
 mod table;
 
 static SYNTAX: &str = "[OPTION] [NUMBER]...";
