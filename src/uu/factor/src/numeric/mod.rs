@@ -15,3 +15,6 @@ pub(crate) use modular_inverse::modular_inverse;
 
 mod montgomery;
 pub(crate) use montgomery::{Arithmetic, Montgomery};
+
+mod sqrt;
+pub use sqrt::floor_sqrt;
