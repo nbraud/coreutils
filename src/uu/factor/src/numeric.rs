@@ -30,7 +30,14 @@ pub fn floor_sqrt(n: u64) -> u64 {
         return 0;
     }
 
-    let mut x = n;
+    let mut x = {
+        let k = 64 - n.leading_zeros();
+        // 2ᵏ⁻¹ ≤ n < 2ᵏ
+        debug_assert!(k == 64 || n < (1 << k));
+        debug_assert!(k == 0 || n >= (1 << (k - 1)));
+
+        1 << ((k / 2) + (k % 2))
+    };
     debug_assert!(x * x >= n, "{} < √{}", x, n);
 
     loop {
