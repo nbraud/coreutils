@@ -13,7 +13,9 @@ use std::cmp::{max, min};
 
 use crate::numeric::*;
 
-pub(crate) fn find_divisor<A: Arithmetic>(n: A) -> u64 {
+const RHO_TRIES: usize = 16;
+
+pub(crate) fn find_divisor<A: Arithmetic>(n: A) -> Option<u64> {
     #![allow(clippy::many_single_char_names)]
     let mut rand = {
         let range = Uniform::new(1, n.modulus());
@@ -23,7 +25,7 @@ pub(crate) fn find_divisor<A: Arithmetic>(n: A) -> u64 {
 
     let quadratic = |a, b| move |x| n.add(n.mul(a, n.mul(x, x)), b);
 
-    loop {
+    for _ in 0..RHO_TRIES {
         let f = quadratic(rand(), rand());
         let mut x = rand();
         let mut y = x;
@@ -40,8 +42,10 @@ pub(crate) fn find_divisor<A: Arithmetic>(n: A) -> u64 {
                 // Failure, retry with a different quadratic
                 break;
             } else if d > 1 {
-                return d;
+                return Some(d);
             }
         }
     }
+
+    None
 }

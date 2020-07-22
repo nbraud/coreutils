@@ -54,6 +54,14 @@ impl fmt::Display for Factors {
     }
 }
 
+fn repeat_until_success<T>(mut f: impl FnMut() -> Option<T>) -> T {
+    loop {
+        if let Some(x) = f() {
+            return x;
+        }
+    }
+}
+
 fn _factor<A: Arithmetic + miller_rabin::Basis>(num: u64, f: Factors) -> Factors {
     use miller_rabin::Result::*;
 
@@ -79,7 +87,7 @@ fn _factor<A: Arithmetic + miller_rabin::Basis>(num: u64, f: Factors) -> Factors
         }
 
         Composite(d) => d,
-        Pseudoprime => rho::find_divisor::<A>(n),
+        Pseudoprime => repeat_until_success(|| rho::find_divisor::<A>(n)),
     };
 
     let f = _factor(divisor, f);
