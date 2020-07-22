@@ -25,6 +25,25 @@ pub(crate) fn gcd(mut a: u64, mut b: u64) -> u64 {
     a
 }
 
+pub fn floor_sqrt(n: u64) -> u64 {
+    if n == 0 {
+        return 0;
+    }
+
+    let mut x = n;
+    debug_assert!(x * x >= n, "{} < √{}", x, n);
+
+    loop {
+        let y = (x + n / x) / 2;
+
+        if y >= x {
+            return x;
+        } else {
+            x = y;
+        }
+    }
+}
+
 pub(crate) trait Arithmetic: Copy + Sized {
     // The type of integers mod m, in some opaque representation
     type ModInt: Copy + Sized + Eq;
@@ -307,6 +326,16 @@ pub(crate) fn modular_inverse<T: Int>(a: T) -> T {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use quickcheck::quickcheck;
+
+    quickcheck! {
+        /// Test that floor_sqrt(n) <= √n < floor_sqrt(n) + 1
+        fn test_floor_sqrt(n: u64) -> bool {
+            let s = floor_sqrt(n);
+            let t = s + 1;
+            (s * s <= n) && (t * t > n)
+        }
+    }
 
     macro_rules! parametrized_check {
         ( $f:ident ) => {
