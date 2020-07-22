@@ -37,8 +37,13 @@ mod sieve;
 
 #[cfg_attr(test, allow(dead_code))]
 fn main() {
-    let out_dir = env::var("OUT_DIR").unwrap();
-    let mut file = File::create(&Path::new(&out_dir).join("prime_table.rs")).unwrap();
+    let out_str = env::var("OUT_DIR").unwrap();
+    let out_dir = Path::new(&out_str);
+    prime_table(&out_dir).unwrap();
+}
+
+fn prime_table(out_dir: &Path) -> std::io::Result<()> {
+    let mut file = File::create(out_dir.join("prime_table.rs"))?;
 
     // By default, we print the multiplicative inverses mod 2^64 of the first 1k primes
     const DEFAULT_SIZE: usize = 320;
@@ -47,7 +52,7 @@ fn main() {
         .and_then(|s| s.parse::<usize>().ok())
         .unwrap_or(DEFAULT_SIZE);
 
-    write!(file, "{}", PREAMBLE).unwrap();
+    write!(file, "{}", PREAMBLE)?;
     let mut cols = 3;
 
     // we want a total of n + 1 values
@@ -75,8 +80,9 @@ fn main() {
         file,
         "\n];\n\n#[allow(dead_code)]\npub const NEXT_PRIME: u64 = {};\n",
         x
-    )
-    .unwrap();
+    )?;
+
+    Ok(())
 }
 
 #[test]
